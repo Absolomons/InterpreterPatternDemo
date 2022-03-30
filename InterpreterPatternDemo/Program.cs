@@ -9,17 +9,27 @@ namespace Interpreter
     {
         public static void Main(string[] args)
         {
-            string number = "1934";
+            // year to be translated to roman numerals, not meant for years above 4 digits
+            string year = "1934";
 
-            string numberRev = number;
-
-            Context context = new Context(numberRev);
+            Context context = new Context(year);
 
             List<Expression> tree = new List<Expression>();
-            tree.Add(new ThousandExpression());
-            tree.Add(new HundredExpression());
-            tree.Add(new TenExpression());
+            if (context.Input.Length >= 4)
+            {
+                tree.Add(new ThousandExpression());
+            }
+            if (context.Input.Length >= 3)
+            {
+                tree.Add(new HundredExpression());
+            }
+            if (context.Input.Length >= 2)
+            {
+                tree.Add(new TenExpression());
+            }
             tree.Add(new OneExpression());
+            
+
 
             // Interpret
             foreach (Expression exp in tree)
@@ -27,7 +37,7 @@ namespace Interpreter
                 exp.Interpret(context);
             }
 
-            Console.WriteLine(number + " = " + context.Output);
+            Console.WriteLine(year + " = " + context.Output);
 
             Console.ReadKey();
         }
